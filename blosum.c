@@ -43,7 +43,7 @@
 12/1/92   Added B,Z,X columns to positive matrix.
 1/14/93   Replaced MAXNSEQ with MAXSEQS from motifj.h.
 1/18/93   Fixed problem with BZ value.
-6/7/93    Added scale option. 
+6/7/93    Added scale option.
 9/22/93   Added B, Z and X to .sij file
 9/29/93   Fixed problem reading blocks db with sequence weights
 >>>>>>>>>>>>>>>>>>>>>  Blocks 7.x <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -120,7 +120,7 @@ char *argv[];
 
    printf("BLOSUM: (C) Copyright 1992, Fred Hutchinson Cancer");
    printf(" Research Center\n");
- 
+
    /*------------Arg 1, blocks database name ----------------*/
    if (argc > 1) strcpy(datfile, argv[1]);
    else
@@ -196,7 +196,7 @@ char *argv[];
    if (argc > 5)      iscale = atoi(argv[5]);
    else
    {
-      iscale = 0;     
+      iscale = 0;
       printf("Enter scale n for 1/n bits [%d]: ", iscale);
       gets(ctemp);
       if (strlen(ctemp)) iscale = atoi(ctemp);
@@ -384,7 +384,7 @@ char *argv[];
 	 else s = -20.0;    		/* minus infinity */
 	 /*--- Round off for the log base 10 matrix ----*/
 	 dtemp = 10.0 * s / log (10.0);	/*-- log base 10 */
-         tij[row][col] = round(dtemp);
+         tij[row][col] = mround(dtemp);
 	 /*--- Log base 2 (bit) matrix ---*/
 	 s /= log (2.0);		/* log base 2 = bits */
 	 /*--- compute entropy & expected value in bits */
@@ -407,7 +407,7 @@ char *argv[];
    for (row=0; row<AAS; row++)
       for (col=0; col<=row; col++)
         if (row != col) sij[col][row] = sij[row][col];
-    
+
 /*------- Compute the B, Z and X columns ------------------------*/
    /*--------------Compute values for B (20) as the weighted average of
 	  N (2) and D (3) ----------------*/
@@ -512,7 +512,7 @@ char *argv[];
       fprintf(fout, "#  Existing Clusters Used\n");
    fprintf(fout, "#  Entropy = % 8.4f, Expected = % 8.4f\n",
         entropy, expected);
-   for (col=0; col<AAS; col++) 
+   for (col=0; col<AAS; col++)
       fprintf(fout, "   %1s     ", num_to_aachar(col));
    fprintf(fout, "B   Z   X\n");
    fprintf(fout, "\n");
@@ -528,7 +528,7 @@ char *argv[];
    if (iscale == 0)
    {
       dtemp = 2.0 / sqrt(entropy);
-      iscale = round(dtemp);
+      iscale = mround(dtemp);
       if (iscale < 2) iscale = 2;
    }
 
@@ -562,7 +562,7 @@ char *argv[];
       fprintf(fout, "#  Existing Clusters Used\n");
    fprintf(fout, "#  Entropy = % 8.4f, Expected = % 8.4f\n",
          entropy, expected);
-   for (col=0; col<AAS; col++) 
+   for (col=0; col<AAS; col++)
             fprintf(fout, " %1s  ", num_to_aachar(col));
    fprintf(fout, "B   Z   X\n");
    for (row=0; row<AAS+3; row++)
@@ -570,7 +570,7 @@ char *argv[];
       for (col=0; col<=row; col++)
       {
 	 s = (double) sij[row][col] * iscale;
-         is = round(s);
+         is = mround(s);
 	 fprintf(fout, "%3d ", is);
 	 sumsij += is;
 	 if (is < minsij) minsij = is;
@@ -591,7 +591,7 @@ char *argv[];
       for (col=0; col <= row; col++)
       {
          s = (double) sij[row][col] * iscale;
-         is = round(s) - minsij;
+         is = mround(s) - minsij;
   	 printf("%3d ", is);
       }
       printf("\n");
@@ -646,7 +646,7 @@ FILE *fdat;
 	     fill_block(fdat);
 	     if (Cluster >= 0) cluster_seqs();    /*  re-cluster sequences */
 	     if (Cluster == -2) count_block();     /* no clustering */
-             else if (Cluster == -3) count_weight(); 
+             else if (Cluster == -3) count_weight();
                   else if (Cluster == -4) count_position();
 	               else count_cluster();		  /* clustering */
 	     totblk++;
@@ -750,7 +750,7 @@ void count_block()
 /*   Output for SPSS job to count pairs by strength  */
      TotBlk++;
 /*   printf("%s %9.2f %9.2f %9.2f %d\n",
-	Block.ac, Block.totdiag, Block.totoffd, 
+	Block.ac, Block.totdiag, Block.totoffd,
         Block.totoffd+Block.totdiag, Block.strength);
 */
 
@@ -806,7 +806,7 @@ void count_position()
 	 for (seq2=seq1+1; seq2 < Block.nseq; seq2++)
 	    if (Block.aa[seq1][col] >=0 && Block.aa[seq1][col] < AAS &&
 		Block.aa[seq2][col] >=0 && Block.aa[seq2][col] < AAS &&
-                Block.cluster[seq1] != Block.cluster[seq2]) 
+                Block.cluster[seq1] != Block.cluster[seq2])
 	    {
 		  weight = (double) 1.0 / Block.ncluster[seq2];
 		  weight *= (double) 1.0 / Block.ncluster[seq1];
@@ -1014,7 +1014,7 @@ void cluster_seqs()
       }
       else
 	  Block.ncluster[s1] = nclus[Block.cluster[s1]];
-      
+
    }
    /*   Count the total number of clusters and put in Block.nclus,
         the numbers in Block.ncluster[] are arbitrary */

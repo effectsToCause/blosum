@@ -80,7 +80,7 @@
 #define VMS 4				/* PIR/VMS type */
 #define PROC 5				/* Proclass PCFam file */
 
-#define round(x) ((x >= 0.0) ? (int) (x+0.5) : (int) (x-0.5))
+#define mround(x) ((x >= 0.0) ? (int) (x+0.5) : (int) (x-0.5))
 
 /* Declare new data types */
 typedef unsigned char *aa_type[20][20][MAX_DISTANCE];
@@ -94,7 +94,7 @@ struct motif_struct {
   int freq, dups;
   /*   seq_no[freq] lists the sequence numbers that have the motif,
        pos[freq] lists the offset of the motif in the corresponding
-       sequences; so pos[x] is the offset into sequence # seq_no[x], 
+       sequences; so pos[x] is the offset into sequence # seq_no[x],
        NOT into sequence # x */
   int seq_no[MAXFREQ], pos[MAXFREQ];
   int score, scores[MAX_DOMAIN_WIDTH], domain, mots;
