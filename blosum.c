@@ -43,7 +43,7 @@
 12/1/92   Added B,Z,X columns to positive matrix.
 1/14/93   Replaced MAXNSEQ with MAXSEQS from motifj.h.
 1/18/93   Fixed problem with BZ value.
-6/7/93    Added scale option. 
+6/7/93    Added scale option.
 9/22/93   Added B, Z and X to .sij file
 9/29/93   Fixed problem reading blocks db with sequence weights
 >>>>>>>>>>>>>>>>>>>>>  Blocks 7.x <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -120,7 +120,7 @@ char *argv[];
 
    printf("BLOSUM: (C) Copyright 1992, Fred Hutchinson Cancer");
    printf(" Research Center\n");
- 
+
    /*------------Arg 1, blocks database name ----------------*/
    if (argc > 1) strcpy(datfile, argv[1]);
    else
@@ -196,7 +196,7 @@ char *argv[];
    if (argc > 5)      iscale = atoi(argv[5]);
    else
    {
-      iscale = 0;     
+      iscale = 0;
       printf("Enter scale n for 1/n bits [%d]: ", iscale);
       gets(ctemp);
       if (strlen(ctemp)) iscale = atoi(ctemp);
@@ -407,7 +407,7 @@ char *argv[];
    for (row=0; row<AAS; row++)
       for (col=0; col<=row; col++)
         if (row != col) sij[col][row] = sij[row][col];
-    
+
 /*------- Compute the B, Z and X columns ------------------------*/
    /*--------------Compute values for B (20) as the weighted average of
 	  N (2) and D (3) ----------------*/
@@ -512,7 +512,7 @@ char *argv[];
       fprintf(fout, "#  Existing Clusters Used\n");
    fprintf(fout, "#  Entropy = % 8.4f, Expected = % 8.4f\n",
         entropy, expected);
-   for (col=0; col<AAS; col++) 
+   for (col=0; col<AAS; col++)
       fprintf(fout, "   %1s     ", num_to_aachar(col));
    fprintf(fout, "B   Z   X\n");
    fprintf(fout, "\n");
@@ -562,7 +562,7 @@ char *argv[];
       fprintf(fout, "#  Existing Clusters Used\n");
    fprintf(fout, "#  Entropy = % 8.4f, Expected = % 8.4f\n",
          entropy, expected);
-   for (col=0; col<AAS; col++) 
+   for (col=0; col<AAS; col++)
             fprintf(fout, " %1s  ", num_to_aachar(col));
    fprintf(fout, "B   Z   X\n");
    for (row=0; row<AAS+3; row++)
@@ -646,14 +646,13 @@ FILE *fdat;
 	     fill_block(fdat);
 	     if (Cluster >= 0) cluster_seqs();    /*  re-cluster sequences */
 	     if (Cluster == -2) count_block();     /* no clustering */
-             else if (Cluster == -3) count_weight(); 
+             else if (Cluster == -3) count_weight();
                   else if (Cluster == -4) count_position();
 	               else count_cluster();		  /* clustering */
 	     totblk++;
 	 }
       }
    }
-
    return(totblk);
 }  /* end of read_dat */
 /*====================================================================
@@ -750,7 +749,7 @@ void count_block()
 /*   Output for SPSS job to count pairs by strength  */
      TotBlk++;
 /*   printf("%s %9.2f %9.2f %9.2f %d\n",
-	Block.ac, Block.totdiag, Block.totoffd, 
+	Block.ac, Block.totdiag, Block.totoffd,
         Block.totoffd+Block.totdiag, Block.strength);
 */
 
@@ -806,7 +805,7 @@ void count_position()
 	 for (seq2=seq1+1; seq2 < Block.nseq; seq2++)
 	    if (Block.aa[seq1][col] >=0 && Block.aa[seq1][col] < AAS &&
 		Block.aa[seq2][col] >=0 && Block.aa[seq2][col] < AAS &&
-                Block.cluster[seq1] != Block.cluster[seq2]) 
+                Block.cluster[seq1] != Block.cluster[seq2])
 	    {
 		  weight = (double) 1.0 / Block.ncluster[seq2];
 		  weight *= (double) 1.0 / Block.ncluster[seq1];
@@ -867,7 +866,6 @@ void count_cluster()
 {
    int seq1, seq2, col;
    double weight;
-   printf("came here");
    for (col=0; col < Block.width; col++)
       for (seq1=0; seq1 < Block.nseq; seq1++)
 	 for (seq2=seq1+1; seq2 < Block.nseq; seq2++)
@@ -892,9 +890,9 @@ void count_cluster()
       TotBlk++;
       TotClump += (Block.totdiag + Block.totoffd) * Block.nclus;
       TotSeg += Block.nseq;
-      printf("%s %9.2f %9.2f %9.2f %d\n", Block.ac,
-	   Block.totdiag,  Block.totoffd,
-           Block.totdiag+Block.totoffd, Block.strength);
+      //printf("%s %9.2f %9.2f %9.2f %d\n", Block.ac,
+	   //Block.totdiag,  Block.totoffd,
+           //Block.totdiag+Block.totoffd, Block.strength);
 
    }
 }  /* end of count_cluster */
@@ -912,9 +910,10 @@ void count_cluster()
 /*======================================================================*/
 void cluster_seqs()
 {
-   int clus, npair, threshold, s1, s2, l1, l2, px, i, i1, i2;
+   int clus, npair, s1, s2, l1, l2, px, i, i1, i2;
    int nclus[MAXSEQS], minclus, oldclus;
    struct pair *pairs;
+   float threshold;
 /*UNIX   struct pair pairs[MAXSEQS*(MAXSEQS-1)/2];  */
 
    npair = Block.nseq*(Block.nseq-1)/2;
@@ -924,7 +923,7 @@ void cluster_seqs()
       printf("\ncluster_seqs: Unable to allocate pair structure!\n");
       exit(-1);
    }
-   threshold = (int) (Cluster*(Block.width))/100;
+   (float) (Cluster*(Block.width)) / 100;
 
 /*    Compute scores for all possible pairs of sequences            */
    for (s1=0; s1<Block.nseq-1; s1++)   		/* col = 0, n-2     */
@@ -948,8 +947,8 @@ void cluster_seqs()
    }  /* end of s1 */
 
 /*  Print scores */
-/*   printf("\nThreshold=%d", threshold);
-   for (s2=1; s2<Block.nseq; s2++)
+   //printf("\nThreshold=%d", threshold);
+   /*for (s2=1; s2<Block.nseq; s2++)
    {
       printf ("\n");
       for (s1=0; s1<s2; s1++)
@@ -957,8 +956,8 @@ void cluster_seqs()
 	 px = INDEX(Block.nseq, s1, s2);
 	 printf(" %.3d", pairs[px].score);
       }
-    }
-*/
+    }*/
+
 
 /*-------Cluster if score exceeds threshold by scanning cols (s1) */
    for (s1=0; s1<Block.nseq; s1++)
@@ -967,54 +966,65 @@ void cluster_seqs()
       Block.ncluster[s1] = 1;
       nclus[s1] = 0;
    }
+
    clus = 0;        				/* cluster number */
-   for (s1=0; s1<Block.nseq-1; s1++)   		/* col = 0, n-2     */
+   for (s1=0; s1<Block.nseq-1; s1++)  /* col = 0, n-2     */
+   {
       for (s2=s1+1; s2<Block.nseq; s2++)	/* row = col+1, n-1 */
       {
-	 px = INDEX(Block.nseq, s1, s2);
-	 if (pairs[px].score >= threshold)	/*  cluster this pair */
-	 {
-	    if (Block.cluster[s1] < 0)          /* s1 not yet clustered */
-	    {
-	       if (Block.cluster[s2] < 0)       /* new cluster */
-	       {
-		  Block.cluster[s1] = clus++;
-		  Block.cluster[s2] = Block.cluster[s1];
-	       }
-	       else  				/* use s2's cluster  */
-		  Block.cluster[s1] =  Block.cluster[s2];
-	    }
-	    /*  use s1's cluster if it has one and s2 doesn't */
-	    else if (Block.cluster[s1] >= 0 && Block.cluster[s2] < 0)
-	       Block.cluster[s2] = Block.cluster[s1];
-	    /* merge the two clusters into the lower number */
-	    else if (Block.cluster[s1] >= 0 && Block.cluster[s2] >= 0)
-	    {
-	       minclus = Block.cluster[s1]; oldclus = Block.cluster[s2];
-	       if (Block.cluster[s2] < Block.cluster[s1])
-	       {
-		  minclus = Block.cluster[s2]; oldclus = Block.cluster[s1];
-	       }
-	       for (i1=0; i1<Block.nseq; i1++)
-		 if (Block.cluster[i1] == oldclus)
-		     Block.cluster[i1] = minclus;
-	    }
-	 }  /* end of if pairs */
+         px = INDEX(Block.nseq, s1, s2);
+         if (pairs[px].score >= threshold)	/*  cluster this pair */
+         {
+            if (Block.cluster[s1] < 0)          /* s1 not yet clustered */
+            {
+               if (Block.cluster[s2] < 0)       /* new cluster */
+               {
+                  Block.cluster[s1] = clus++;
+                  Block.cluster[s2] = Block.cluster[s1];
+               }
+               else  				/* use s2's cluster  */
+               {
+                  Block.cluster[s1] =  Block.cluster[s2];
+               }
+            }
+            /*  use s1's cluster if it has one and s2 doesn't */
+            else if (Block.cluster[s1] >= 0 && Block.cluster[s2] < 0)
+            {
+               Block.cluster[s2] = Block.cluster[s1];
+            }
+            /* merge the two clusters into the lower number */
+            else if (Block.cluster[s1] >= 0 && Block.cluster[s2] >= 0)
+            {
+               minclus = Block.cluster[s1]; oldclus = Block.cluster[s2];
+               if (Block.cluster[s2] < Block.cluster[s1])
+               {
+                  minclus = Block.cluster[s2]; oldclus = Block.cluster[s1];
+               }
+               for (i1=0; i1<Block.nseq; i1++)
+               {
+                  if (Block.cluster[i1] == oldclus)
+                  {
+                     Block.cluster[i1] = minclus;
+                  }
+               }
+            }
+         }  /* end of if pairs */
       }  /* end of s2 */
+   }
 
    /*---  Set Block.ncluster, get rid of negative cluster numbers --*/
    for (s1=0; s1<Block.nseq; s1++)
-      if (Block.ncluster[s1] >= 0)  nclus[Block.cluster[s1]]++;
-   for (s1=0; s1<Block.nseq; s1++)
    {
-      if (Block.cluster[s1] < 0)
+      if (Block.ncluster[s1] >= 0){nclus[Block.cluster[s1]]++;}
+      for (s1=0; s1<Block.nseq; s1++)
       {
-	  Block.cluster[s1] = clus++;
-	  Block.ncluster[s1] = 1;
+         if (Block.cluster[s1] < 0)
+         {
+            Block.cluster[s1] = clus++;
+            Block.ncluster[s1] = 1;
+         }
+         else {Block.ncluster[s1] = nclus[Block.cluster[s1]];}
       }
-      else
-	  Block.ncluster[s1] = nclus[Block.cluster[s1]];
-      
    }
    /*   Count the total number of clusters and put in Block.nclus,
         the numbers in Block.ncluster[] are arbitrary */
