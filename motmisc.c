@@ -30,7 +30,7 @@
 DOS*/
 #include <sys/types.h>
 #include <sys/dir.h>
-#include "motifj.big.h"
+#include "motifj.h"
 
 /*---- Global scoring matrix , order is :
 		  A R N D C Q E G H I L K M F P S T W Y V J   -----------*/
@@ -503,7 +503,7 @@ char *line;
       strcat(filename, tname);
       if ( (ftmp=fopen(filename, "w"))== NULL)
       {
-	 strcpy(tname, pros);
+	 strcpy(tname, pros);     
 	 tname[strlen(pros)-1] = '\0';
 	 sprintf(mem, "md %s", tname);
 	 test = system(mem);
@@ -522,7 +522,7 @@ char *line;
       }
    }
    return(pros);
-}
+} 
 */
 /*=======================================================================
   dir_unix(): UNIX code to get name of directory from line and
@@ -579,7 +579,7 @@ struct db_id *makedbid()
    new->block = NO;
    new->frag = NO;
    new->search = NO;
-   new->pvalue = (double) 0.0;
+   new->pvalue = (double) 0.0; 
    new->next = NULL;
    new->prior = NULL;
    return(new);

@@ -30,33 +30,21 @@ matspace:	matspace.o motmisc.o
 		$(CL) matspace.o motmisc.o $(LFLAGS) matspace
 #
 #
-blosum.o:	blosum.c motifj.big.h
+blosum.o:	blosum.c motifj.h
 		$(CC) $(CFLAGS) blosum.c
-matrix.o:	matrix.c motifj.big.h
+matrix.o:	matrix.c motifj.h
 		$(CC) $(CFLAGS) matrix.c
-matalin.o:	matalin.c motifj.big.h
+matalin.o:	matalin.c motifj.h
 		$(CC) $(CFLAGS) matalin.c
-matblas.o:	matblas.c motifj.big.h
+matblas.o:	matblas.c motifj.h
 		$(CC) $(CFLAGS) matblas.c
-matfas.o:	matfas.c motifj.big.h
+matfas.o:	matfas.c motifj.h
 		$(CC) $(CFLAGS) matfas.c
-matspace.o:	matspace.c motifj.big.h
+matspace.o:	matspace.c motifj.h
 		$(CC) $(CFLAGS) matspace.c
 #
-motmisc.o:	motmisc.c motifj.big.h
+motmisc.o:	motmisc.c motifj.h
 		$(CC) $(CFLAGS) motmisc.c
 #
 clean:
-	rm blosum.o
-	rm matrix.o
-	rm matalin.o
-	rm matblas.o
-	rm matfas.o
-	rm matspace.o
-	rm motmisc.o
-	rm blosum
-	rm matrix
-	rm matalin
-	rm matblas
-	rm matfas
-	rm matspace
+	rm -f matalin matblas matfas matrix matspace blosum motmisc.o blosum.o matrix.o matalin.o matblas.o matfas.o matspace.o

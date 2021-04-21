@@ -1,31 +1,25 @@
 /*------------------------------------------------------------------------*/
 /*(C) Copyright 1991, Fred Hutchinson Cancer Research Center              */
 /*      motifj.h  Header file for PROTOMAT programs                       */
-/* NOTE for Silicon Graphics users:  The type of scores in
-       struct score should be changed from char to int to get correct
-       processing (but not for SUN!)                                      */
 /*------------------------------------------------------------------------*/
 /*  6/29/90 J. Henikoff
- >>>>>>>>>>>>>>>>>>>>>>>>>Blocks 8.0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-   8/ 1/94  Changed MAXFREQ from 450 to 700 for PS01033
-	    NOTE: PS00028 wants 899 dups for 98 sequences => MAXFREQ = 997
-            Changed VERSION from 7 to 8
-   2/ 1/95  Increased MAX_LENGTH from 4000 to 5500
-   7/11/95  Changed MOTAUTO to MOTAUTO4 & added MOTAUTO3
- >>>>>>>>>>>>>>>>>>>>>>>>>Blocks 9.0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-  12/ 5/95  Changed MAXSEQS from 700 to 715 for PS50011
-            Changed MAXFREQ from 700 to 715 also
-   7/23/97  Added database type for Proclass PCFam
-  10/23/97  Added struct pb_counts for pb_weights()
-  10/28/97  Changed MOTAUTO4 from 2 to 3 and MOTAUTO3 from 12 to 6
-   1/18/98  Changed MAXSEQS & MAXFREQ from 715 to 980
-   2/27/98  Changed MAXFREQ from 980 to 1000 for PS00022
+  >>>>>>>>>>>>>>>>>>  Blocks 3.0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    8/26/91 Added score structure.   
+    9/19/91 Increased FNAMELEN (50 -> 80) and MAXLINE (150 -> 240).
+    9/23/91 Added struct split_name.
+   11/20/91 Copyright & comments.
+  >>>>>>>>>>>>>>>>>>>>> Blocks 4.0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    1/27/92  Added db_id structure.
+    2/12/92  Modified db_id structure.  Added IDLEN.
+ >>>>>>>>>>>>>>>>>>>>>>>>Blocks 5.0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    9/18/92  Added round macro.
+   10/12/92  Added pvalue to struct db_id.
 --------------------------------------------------------------------------*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#define VERSION		   8		/*  motifj version number */
+#define VERSION		   6		/*  motifj version number */
 #define YES                1
 #define NO                 0
 #define ESC               27
@@ -45,22 +39,20 @@
 
 #define MAX_DISTANCE  	  24	/* Max spacing between aminos of motif */
 #define MIN_DISTANCE      1     /* Min distance specification */
-#define MAXSEQS	  	  980   /* Max number of sequences to be analyzed */
+#define MAXSEQS	  	  250   /* Max number of sequences to be analyzed */
 #define MINSEQS           2     /* Min number of sequences to be analyzed */
-#define MAXFREQ           1000  /* Max occurences of motif in all seqs */
-#define MAX_LENGTH	  5500  /* Max length of each sequence */
-#define MIN_DOMAIN_WIDTH  10	/* Minimum width */
+#define MAXFREQ           450   /* Max occurences of motif in all seqs */
+#define MAX_LENGTH	  4000  /* Max length of each sequence */
+#define MIN_DOMAIN_WIDTH  10 	/* Minimum width of displayed block */
 #define MAX_DOMAIN_WIDTH  55	/* Maximum width */
-#define MAX_MERGE_WIDTH   55	/* Max. width of merged blocks */
+#define MAX_MERGE_WIDTH   60	/* Max. width of merged blocks */
 #define RELEVANT_MOTIFS   50	/* Only top scoring motifs are retained */
 #define MAX_MOTIFS	  100	/* Buffer motifs before discarding */
 #define MINSCORE          1     /* Min block trimming column score (0-2500)*/
 #define CLTHRES            80   /* Clustering identity percentage (0-100)*/
 #define DROPSCORE         -10   /* Default std devs *10 for dropping block */
-#define MOTAUTO4            3   /* max. # motifs for run type 4  */
-#define MOTAUTO3	    6   /* min. # motifs for run type 3 */
+#define MOTAUTO             2   /* # motifs for automatic cutoffs */
 #define MAXBLK             15   /* max # blocks for shotgun assembly */
-#define MAXTITLE	   75   /* max sequence title length */
 
 #define PROTEIN_SUBDIRECTORY "pros/"  /* Subdirectory containing proteins */
 #define PROTEIN_EXTENSION    ".pro"    /* Extension for all protein files */
@@ -70,15 +62,14 @@
 #define FNAMELEN              80       /* Max length of file name */
 #define MAXLINE               240      /* Max line length for ASCII file */
 #define MATSIZE               21       /* Scoring matrix dimension */
-#define HIGHPASS              4	       /* Default high pass filter value */
+#define HIGHPASS              8	       /* Default high pass filter value */
 
-#define MAXDB 6				/* Max. # database formats */
+#define MAXDB 5				/* Max. # database formats */
 #define GB 0				/* GenBank type */
 #define PIR 1				/* PIR type */
 #define EMBL 2				/* EMBL type */
 #define UNI 3				/* UNIVERSAL type */
 #define VMS 4				/* PIR/VMS type */
-#define PROC 5				/* Proclass PCFam file */
 
 #define mround(x) ((x >= 0.0) ? (int) (x+0.5) : (int) (x-0.5))
 
@@ -90,14 +81,8 @@ typedef unsigned char *aa_type[20][20][MAX_DISTANCE];
 	  they must not exceed 255 in value */
 struct motif_struct {
   unsigned char aa1, aa2, aa3, distance1, distance2;
-  /*  freq is the number of sequences with this motif */
-  int freq, dups;
-  /*   seq_no[freq] lists the sequence numbers that have the motif,
-       pos[freq] lists the offset of the motif in the corresponding
-       sequences; so pos[x] is the offset into sequence # seq_no[x], 
-       NOT into sequence # x */
-  int seq_no[MAXFREQ], pos[MAXFREQ];
-  int score, scores[MAX_DOMAIN_WIDTH], domain, mots;
+  unsigned char freq, dups, seq_no[MAXFREQ];
+  int pos[MAXFREQ], score, scores[MAX_DOMAIN_WIDTH], domain, mots;
   char group, sub_group;
   };
 
@@ -247,7 +232,6 @@ struct split_name {
 /*------ Structure to hold the contents of a .lis or .lst file ------*/
 struct db_id {
    char entry[IDLEN+1];		/* sequence name */
-   char pir[IDLEN+1];		/* PIR entry name */
    char ps[2];			/* PS type=T, F or P */
    int len;			/* sequence length */
    int frag;			/* YES if seq is a fragment */
@@ -261,9 +245,3 @@ struct db_id {
    struct db_id *next;
    struct db_id *prior;
 };
-/*  For pb_weights(), from BLIMPS  */
-struct pb_counts {		/* for pb_weights() */
-  double diffaas;		/* # of different aas in position */
-  double naas[MATSIZE]; 	/* # of each aa in position */
-};
-

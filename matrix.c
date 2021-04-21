@@ -17,10 +17,6 @@
   9/2/92  Changed to ignore lines starting with #, > or ;.
           Ignore * columns.
  10/17/92 Added comments.
- 11/23/92 Process * or J column as J, distinct from X.
- 12/10/92 Corrected print out of X row.
-  2/17/93 Added Altschul frequencies.
-  8/13/94 Solaris
 =========================================================================*/
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,7 +26,7 @@
 
 #define NO 0
 #define YES 1
-#define AAS 24
+#define AAS 23
 
 void read_file();
 void histogram();
@@ -39,15 +35,12 @@ void display2();
 void entropy();
 
 /*---- Global scoring matrix , order is :
-  A R N D C Q E G H I L K M F P S T W Y V B Z X J   -----------*/
+  A R N D C Q E G H I L K M F P S T W Y V B Z J   -----------*/
 
 /*------ Dayhoff AA frequencies ----------------------*/
 double Dayhoff[20] = {0.087, 0.041, 0.040, 0.047, 0.033, 0.038, 0.050,
 	0.089, 0.034, 0.037, 0.085, 0.081, 0.015, 0.040, 0.051, 0.070,
 	0.058, 0.010, 0.030, 0.065};
-double Altschul[20] = {0.081, 0.057, 0.045, 0.054, 0.015, 0.039, 0.061,
-	 0.068, 0.022, 0.057, 0.093, 0.056, 0.025, 0.040, 0.049, 0.068,
-	 0.058, 0.013, 0.032, 0.067};
 /*---------Jones AA frequencies -------------------------*/
 double Jones[20] =   {0.077, 0.051, 0.043, 0.052, 0.020, 0.041, 0.062,
         0.074, 0.023, 0.053, 0.091, 0.059, 0.024, 0.040, 0.051, 0.069,
@@ -56,8 +49,8 @@ double Jones[20] =   {0.077, 0.051, 0.043, 0.052, 0.020, 0.041, 0.062,
 double Blosum[20] = {0.074, 0.052, 0.045, 0.054, 0.025, 0.034, 0.054,
 	  0.074, 0.026, 0.068, 0.099, 0.058, 0.025, 0.047, 0.039, 0.057,
 	  0.051, 0.013, 0.032, 0.073};
-char Alphabet[24]={'A','R','N','D','C','Q','E','G','H','I','L','K',
-		   'M','F','P','S','T','W','Y','V','B','Z','X','J'};
+char Alphabet[23]={'A','R','N','D','C','Q','E','G','H','I','L','K',
+		   'M','F','P','S','T','W','Y','V','B','Z','J'};
 /*-----------  Dayhoff row order ----------------------*/
 int DayRow[20] = {4,15,16,14,0,7,2,3,6,5,8,1,11,12,9,10,19,13,18,17};
 /*=======================================================================*/
@@ -89,7 +82,6 @@ char *argv[];
    fclose(fin);
    display(score1);
    printf("Dayhoff frequencies.\n"); entropy(score1, Dayhoff);
-   printf("Altschul frequencies.\n"); entropy(score1, Altschul);
    printf("Jones frequencies.\n"); entropy(score1, Jones);
    printf("Blosum 62 frequencies.\n"); entropy(score1, Blosum);
    histogram(score1);
@@ -142,8 +134,7 @@ int scores[AAS][AAS];
 /*----------Read file until first non-blank line --------------*/
 /* Skip comments at beginning of file - 1st char = #, > or ;   */
    line[0] = '\0';
-   while ((strlen(line) < (size_t) 1 || 
-           line[0]=='#' || line[0]=='>' || line[0]==';')
+   while ((strlen(line) < 1 || line[0]=='#' || line[0]=='>' || line[0]==';')
           && fgets(line, sizeof(line), fin) != NULL)
 	    ;
 /*------See if the first line has characters on it ------------*/
@@ -151,7 +142,7 @@ int scores[AAS][AAS];
    if (strstr(line, "A") != NULL)	/* This line has characters */
    {
       row = 0;	/* # of alphabetic characters on the line */
-      for (i=0; i < (int) strlen(line); i++)
+      for (i=0; i<strlen(line); i++)
       {
 	 col = -1;
 	 if (line[i] == 'A') col = 0;
@@ -176,8 +167,8 @@ int scores[AAS][AAS];
 	 if (line[i] == 'V') col = 19;
 	 if (line[i] == 'B') col = 20;
 	 if (line[i] == 'Z') col = 21;
-	 if (line[i]=='O' || line[i]=='X') col = 22;
-	 if (line[i]=='J' || line[i]=='*') col = 23;
+	 if (line[i]=='J' || line[i]=='O' || line[i]=='X') 
+             col = 22;
 	 if (col >= 0)
 	 {
 	    alpha[row] = col;
@@ -194,7 +185,7 @@ int scores[AAS][AAS];
    line[0] = '\0';
    while (fgets(line, sizeof(line), fin) != NULL)
    {
-      if (strlen(line) > (size_t) 1 && nrows < AAS)
+      if (strlen(line) > 1 && nrows < AAS)
       {
 	 if (alpha[nrows] >= 0 && alpha[nrows] < AAS)
 	 {
@@ -241,8 +232,7 @@ int scores[AAS][AAS];
    char ctemp[3];
    int row, col, i, j;
 /*-------Print full matrix --------------------------------------------*/
-   printf("   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V"); 
-   printf("  B  Z  X  J\n");
+   printf("   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  J\n");
    for (row=0; row<AAS; row++)
    {
      strncpy(ctemp, Alphabet+row, 1); ctemp[1] = '\0';
@@ -251,13 +241,10 @@ int scores[AAS][AAS];
 	printf("%2d ", scores[row][col]);
      printf("\n");
    }
-   printf("   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V"); 
-   printf("  B  Z  X  J\n");
+   printf("   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  J\n");
 
 /*--------------------Print half matrix ---------------------------------*/
-   printf("\n   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V"); 
-   printf("  B  Z  X  J\n");
-
+   printf("\n   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  J\n");
    for (row=0; row<AAS; row++)
    {
      strncpy(ctemp, Alphabet+row, 1); ctemp[1] = '\0';
@@ -266,8 +253,7 @@ int scores[AAS][AAS];
 	printf("%2d ", scores[row][col]);
      printf("\n");
    }
-   printf("   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V"); 
-   printf("  B  Z  X  J\n");
+   printf("   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  J\n");
 /*-------------Print half matrix in Dayhoff order -----------------------*/
    printf("\n   C  S  T  P  A  G  N  D  E  Q  H  R  K  M  I  L  V  F  Y  W\n");
    for (i=0; i<20; i++)
