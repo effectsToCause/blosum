@@ -675,8 +675,8 @@ read_dat(fdat)
 				Block.strength = MinStr;	/* use block if no strength field */
 			if (Block.strength >= MinStr && Block.strength <= MaxStr) {
 
-				fprintf(stderr, "Block %d:%s\n", totblk, Block.ac);
-				fflush(stderr);
+				//fprintf(stderr, "Block %d:%s\n", totblk, Block.ac);
+				//fflush(stderr);
 
 				fill_block(fdat);
 
