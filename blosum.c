@@ -61,7 +61,7 @@
 8/31/94   Report weighted average of clusters per block, TotClump
 ==========================================================================*/
 
-#include "motifj.big.h"
+#include "motifj.h"
 #include <math.h>
 
 #define AAS 20
@@ -999,7 +999,7 @@ cluster_seqs()
 	int clus, npair, s1, s2, l1, l2, px, i, i1, i2;
 	int nclus[MAXSEQS], minclus, oldclus;
 	struct pair *pairs;
-   float threshold;
+    float threshold;
 	/*
 	   UNIX struct pair pairs[MAXSEQS*(MAXSEQS-1)/2];
 	 */
