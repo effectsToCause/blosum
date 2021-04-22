@@ -14,7 +14,7 @@ Steven Henikoff and Jorja G. Henikoff, "Amino acid substitution matrices
 For each matrix in the series, the following files are included:
 	blosum*.out	Blosum output (includes raw frequencies)
         blosum*.qij	Target frequencies (odds ratios)
-	blosum*.sij	Matrix in bit units, generic format 
+	blosum*.sij	Matrix in bit units, generic format
         blosum*.iij	Matrix in variably scaled units, integer values
 	blosum*.fas	blosum*.iij in FASTA/SSEARCH format
 	blosum*.bla	blosum*.iij BLASTP format
@@ -22,7 +22,7 @@ For each matrix in the series, the following files are included:
 The integer-valued matrices, blosum*.iij, include columns for B, Z and X
 computed as weighted averages of columns N & D for B, of Q & E for Z, and of
 all 20 amino acids for X. The scale is determined from the entropy H as:
-    scale = min(1/2, 1/x) bits where x = round(2/sqrt(H)).
+    scale = min(1/2, 1/x) bits where x = mround(2/sqrt(H)).
 
 	Several programs are also included in the blosum.tar file. All
 are written in standard C. They are:

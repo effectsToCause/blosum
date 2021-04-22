@@ -61,7 +61,7 @@
 8/31/94   Report weighted average of clusters per block, TotClump
 ==========================================================================*/
 
-#include "motifj.h"
+#include "motifj.big.h"
 #include <math.h>
 
 #define AAS 20
@@ -409,7 +409,7 @@ main(argc, argv)
 	 /*--- Round off for the log base 10 matrix ----*/
 			dtemp = 10.0 * s / log(10.0);
 									/*-- log base 10 */
-			tij[row][col] = round(dtemp);
+			tij[row][col] = mround(dtemp);
 	 /*--- Log base 2 (bit) matrix ---*/
 			s /= log(2.0);		/* log base 2 = bits */
 	 /*--- compute entropy & expected value in bits */
@@ -559,7 +559,7 @@ main(argc, argv)
 /*-------------Determine the scale based on entropy-------------------*/
 	if (iscale == 0) {
 		dtemp = 2.0 / sqrt(entropy);
-		iscale = round(dtemp);
+		iscale = mround(dtemp);
 		if (iscale < 2)
 			iscale = 2;
 	}
@@ -597,7 +597,7 @@ main(argc, argv)
 	for (row = 0; row < AAS + 3; row++) {
 		for (col = 0; col <= row; col++) {
 			s = (double) sij[row][col] * iscale;
-			is = round(s);
+			is = mround(s);
 			fprintf(fout, "%3d ", is);
 			sumsij += is;
 			if (is < minsij)
@@ -621,7 +621,7 @@ main(argc, argv)
 	for (row = 0; row < AAS + 3; row++) {
 		for (col = 0; col <= row; col++) {
 			s = (double) sij[row][col] * iscale;
-			is = round(s) - minsij;
+			is = mround(s) - minsij;
 			printf("%3d ", is);
 		}
 		printf("\n");

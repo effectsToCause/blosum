@@ -30,20 +30,20 @@ matspace:	matspace.o motmisc.o
 		$(CL) matspace.o motmisc.o $(LFLAGS) matspace
 #
 #
-blosum.o:	blosum.c motifj.h
+blosum.o:	blosum.c motifj.big.h
 		$(CC) $(CFLAGS) blosum.c
-matrix.o:	matrix.c motifj.h
+matrix.o:	matrix.c motifj.big.h
 		$(CC) $(CFLAGS) matrix.c
-matalin.o:	matalin.c motifj.h
+matalin.o:	matalin.c motifj.big.h
 		$(CC) $(CFLAGS) matalin.c
-matblas.o:	matblas.c motifj.h
+matblas.o:	matblas.c motifj.big.h
 		$(CC) $(CFLAGS) matblas.c
-matfas.o:	matfas.c motifj.h
+matfas.o:	matfas.c motifj.big.h
 		$(CC) $(CFLAGS) matfas.c
-matspace.o:	matspace.c motifj.h
+matspace.o:	matspace.c motifj.big.h
 		$(CC) $(CFLAGS) matspace.c
 #
-motmisc.o:	motmisc.c motifj.h
+motmisc.o:	motmisc.c motifj.big.h
 		$(CC) $(CFLAGS) motmisc.c
 #
 clean:
