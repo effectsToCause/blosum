@@ -86,30 +86,30 @@ char pam120_matrix[21][21]={
 
 /*=======================================================================*/
 /* Number to amino acid                  */
-char *num_to_aachar(num)
+char *num_to_bbchar(num)
 int num;
 {
   switch (num) {
-    case 0: return("A");
-    case 1: return("R");
-    case 2: return("N");
-    case 3: return("D");
-    case 4: return("C");
-    case 5: return("Q");
-    case 6: return("E");
-    case 7: return("G");
-    case 8: return("H");
-    case 9: return("I");
-    case 10: return("L");
-    case 11: return("K");
-    case 12: return("M");
-    case 13: return("F");
-    case 14: return("P");
-    case 15: return("S");
-    case 16: return("T");
-    case 17: return("W");
-    case 18: return("Y");
-    case 19: return("V");
+    case 0: return("m");
+    case 1: return("c");
+    case 2: return("l");
+    case 3: return("p");
+    case 4: return("b");
+    case 5: return("t");
+    case 6: return("y");
+    case 7: return("a");
+    case 8: return("i");
+    case 9: return("g");
+    case 10: return("n");
+    case 11: return("d");
+    case 12: return("q");
+    case 13: return("r");
+    case 14: return("f");
+    case 15: return("h");
+    case 16: return("w");
+    case 17: return("k");
+    case 18: return("s");
+    case 19: return("v");
     case 20: return("J");
     case -1: return(".");
     default: return("*");		/* Should never happen */
@@ -117,32 +117,30 @@ int num;
 }
 /*======================================================================*/
 /* Amino acid to number                  */
-int aachar_to_num(ch)
+int bbchar_to_num(ch)
 char ch;
 {
   switch (ch) {
-    case 'A': return(0);
-    case 'R': return(1);
-    case 'N': return(2);
-    case 'D': return(3);
-    case 'B': return(3);
-    case 'C': return(4);
-    case 'Q': return(5);
-    case 'E': return(6);
-    case 'Z': return(6);
-    case 'G': return(7);
-    case 'H': return(8);
-    case 'I': return(9);
-    case 'L': return(10);
-    case 'K': return(11);
-    case 'M': return(12);
-    case 'F': return(13);
-    case 'P': return(14);
-    case 'S': return(15);
-    case 'T': return(16);
-    case 'W': return(17);
-    case 'Y': return(18);
-    case 'V': return(19);
+    case 'm': return(0);
+    case 'c': return(1);
+    case 'l': return(2);
+    case 'p': return(3);
+    case 'b': return(4);
+    case 't': return(5);
+    case 'y': return(6);
+    case 'a': return(7);
+    case 'i': return(8);
+    case 'g': return(9);
+    case 'n': return(10);
+    case 'd': return(11);
+    case 'q': return(12);
+    case 'r': return(13);
+    case 'f': return(14);
+    case 'h': return(15);
+    case 'w': return(16);
+    case 'k': return(17);
+    case 's': return(18);
+    case 'v': return(19);
     case 'J': return(20);
     case 'O': return(20);
     case 'X': return(20);
@@ -152,40 +150,40 @@ char ch;
 }
 /*=====================================================================*/
 /* Use internal numerical representation to print amino acid: */
-void pr_num_to_aa(num)
+void pr_num_to_bb(num)
 char num;
 {
   switch (num) {
-    case 0: printf("A"); break;
-    case 1: printf("R"); break;
-    case 2: printf("N"); break;
-    case 3: printf("D"); break;
-    case 4: printf("C"); break;
-    case 5: printf("Q"); break;
-    case 6: printf("E"); break;
-    case 7: printf("G"); break;
-    case 8: printf("H"); break;
-    case 9: printf("I"); break;
-    case 10: printf("L"); break;
-    case 11: printf("K"); break;
-    case 12: printf("M"); break;
-    case 13: printf("F"); break;
-    case 14: printf("P"); break;
-    case 15: printf("S"); break;
-    case 16: printf("T"); break;
-    case 17: printf("W"); break;
-    case 18: printf("Y"); break;
-    case 19: printf("V"); break;
+    case 0: printf("m"); break;
+    case 1: printf("c"); break;
+    case 2: printf("l"); break;
+    case 3: printf("p"); break;
+    case 4: printf("b"); break;
+    case 5: printf("t"); break;
+    case 6: printf("y"); break;
+    case 7: printf("a"); break;
+    case 8: printf("i"); break;
+    case 9: printf("g"); break;
+    case 10: printf("n"); break;
+    case 11: printf("d"); break;
+    case 12: printf("q"); break;
+    case 13: printf("r"); break;
+    case 14: printf("f"); break;
+    case 15: printf("h"); break;
+    case 16: printf("w"); break;
+    case 17: printf("k"); break;
+    case 18: printf("s"); break;
+    case 19: printf("v"); break;
     case 20: printf("."); break;
     case -1: printf("."); break;
     default: printf("*");		/* Should never happen */
     }
 }
 /*======================================================================*/
-void pr_num_to_aa_space(c)
+void pr_num_to_bb_space(c)
 char c;
 {
-	pr_num_to_aa(c);
+	pr_num_to_bb(c);
 	printf(" ");
 }
 /*=======================================================================
@@ -253,7 +251,7 @@ struct score *matrix;
 	 row = 0;	/* # of alphabetic characters on the line */
 	 for (i=0; i<strlen(line); i++)
 	 {
-	    col = aachar_to_num(line[i]);
+	    col = bbchar_to_num(line[i]);
 	    if (col >= 0)
 	    {
 	       alpha[row] = col;
@@ -503,7 +501,7 @@ char *line;
       strcat(filename, tname);
       if ( (ftmp=fopen(filename, "w"))== NULL)
       {
-	 strcpy(tname, pros);     
+	 strcpy(tname, pros);
 	 tname[strlen(pros)-1] = '\0';
 	 sprintf(mem, "md %s", tname);
 	 test = system(mem);
@@ -522,7 +520,7 @@ char *line;
       }
    }
    return(pros);
-} 
+}
 */
 /*=======================================================================
   dir_unix(): UNIX code to get name of directory from line and
@@ -579,7 +577,7 @@ struct db_id *makedbid()
    new->block = NO;
    new->frag = NO;
    new->search = NO;
-   new->pvalue = (double) 0.0; 
+   new->pvalue = (double) 0.0;
    new->next = NULL;
    new->prior = NULL;
    return(new);

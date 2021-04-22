@@ -80,8 +80,8 @@ void count_cluster();
 void count_position();
 void cluster_seqs();
 /*---------------------Functions in motmisc.o ----------------------*/
-int aachar_to_num();
-char *num_to_aachar();
+int bbchar_to_num();
+char *num_to_bbchar();
 
 struct block {                          /* Block structure */
    char ac[10];
@@ -256,7 +256,7 @@ main(argc, argv)
 /*-------------------The frequency matrix ------------------------------*/
 	printf("Frequencies = fij pairs (off-diagonals = 2*fij):\n");
 	for (col = 0; col < AAS; col++)
-		printf("    %1s  ", num_to_aachar(col));
+		printf("    %1s  ", num_to_bbchar(col));
 	printf("\n");
 	totdiag = totoffd = totpairs = (double) 0.0;
 	ftotdiag = ftotoffd = ftotpairs = (double) 0.0;
@@ -275,7 +275,7 @@ main(argc, argv)
 	totpairs = totdiag + totoffd;
 	ftotpairs = ftotdiag + ftotoffd;
 	for (col = 0; col < AAS; col++)
-		printf("   %1s  ", num_to_aachar(col));
+		printf("   %1s  ", num_to_bbchar(col));
 	printf("\n");
 /*--------------Print the target frequencies, qij ----------------------*/
 	if (Cluster >= 0)
@@ -304,7 +304,7 @@ main(argc, argv)
 	else if (Cluster == -1)
 		fprintf(fout, "#  Existing Clusters Used\n");
 	for (col = 0; col < AAS; col++)
-		fprintf(fout, "   %1s   ", num_to_aachar(col));
+		fprintf(fout, "   %1s   ", num_to_bbchar(col));
 	fprintf(fout, "\n");
 	sumqij = 0.0;
 	for (row = 0; row < AAS; row++) {
@@ -336,7 +336,7 @@ main(argc, argv)
 	}
 	sumpi = 0.0;
 	for (col = 0; col < AAS; col++)
-		printf("   %1s  ", num_to_aachar(col));
+		printf("   %1s  ", num_to_bbchar(col));
 	printf("\n");
 	for (col = 0; col < AAS; col++) {
 		printf("%.3f ", FAaPairs[col] / totpairs);	/* p(col,*) */
@@ -354,7 +354,7 @@ main(argc, argv)
 	printf("\nAA Probabilities = fi:\n");
 	sumpi = 0.0;
 	for (col = 0; col < AAS; col++)
-		printf("   %1s  ", num_to_aachar(col));
+		printf("   %1s  ", num_to_bbchar(col));
 	printf("\n");
 	for (col = 0; col < AAS; col++) {
 		printf("%.3f ", (double) AaFreq[col] / totaas);	/* fi */
@@ -546,7 +546,7 @@ main(argc, argv)
 		fprintf(fout, "#  Existing Clusters Used\n");
 	fprintf(fout, "#  Entropy = % 8.4f, Expected = % 8.4f\n", entropy, expected);
 	for (col = 0; col < AAS; col++)
-		fprintf(fout, "   %1s     ", num_to_aachar(col));
+		fprintf(fout, "   %1s     ", num_to_bbchar(col));
 	fprintf(fout, "B   Z   X\n");
 	fprintf(fout, "\n");
 	for (row = 0; row < AAS + 3; row++) {
@@ -592,7 +592,7 @@ main(argc, argv)
 		fprintf(fout, "#  Existing Clusters Used\n");
 	fprintf(fout, "#  Entropy = % 8.4f, Expected = % 8.4f\n", entropy, expected);
 	for (col = 0; col < AAS; col++)
-		fprintf(fout, " %1s  ", num_to_aachar(col));
+		fprintf(fout, " %1s  ", num_to_bbchar(col));
 	fprintf(fout, "B   Z   X\n");
 	for (row = 0; row < AAS + 3; row++) {
 		for (col = 0; col <= row; col++) {
@@ -616,7 +616,7 @@ main(argc, argv)
 /*--------------------Add the high pass value = minsij--------------------*/
 	printf("\nPositive matrix (+%d):\n", 0 - minsij);
 	for (col = 0; col < AAS; col++)
-		printf(" %1s  ", num_to_aachar(col));
+		printf(" %1s  ", num_to_bbchar(col));
 	printf("B   Z   X\n");
 	for (row = 0; row < AAS + 3; row++) {
 		for (col = 0; col <= row; col++) {
@@ -627,12 +627,12 @@ main(argc, argv)
 		printf("\n");
 	}
 	for (col = 0; col < AAS; col++)
-		printf(" %1s  ", num_to_aachar(col));
+		printf(" %1s  ", num_to_bbchar(col));
 	printf("B   Z   X\n");
 /*-----------------The log base 10 matrix ----------------------------*/
 	printf("\n10 times log base 10 matrix:\n");
 	for (col = 0; col < AAS; col++)
-		printf(" %1s  ", num_to_aachar(col));
+		printf(" %1s  ", num_to_bbchar(col));
 	printf("\n");
 	for (row = 0; row < AAS; row++) {
 		for (col = 0; col <= row; col++)
@@ -640,7 +640,7 @@ main(argc, argv)
 		printf("\n");
 	}
 	for (col = 0; col < AAS; col++)
-		printf(" %1s  ", num_to_aachar(col));
+		printf(" %1s  ", num_to_bbchar(col));
 	printf("\n");
 /*----------------------------------------------------------------------*/
 	exit(0);
@@ -739,7 +739,7 @@ fill_block(fdat)
 				 */
 				ptr = strtok(line + li, " \r\n\t");
 				for (i = 0; i < strlen(ptr); i++) {
-					Block.aa[Block.nseq][i] = aachar_to_num(ptr[i]);
+					Block.aa[Block.nseq][i] = bbchar_to_num(ptr[i]);
 					if (Block.aa[Block.nseq][i] >= 0 && Block.aa[Block.nseq][i] < AAS) {
 						AaFreq[Block.aa[Block.nseq][i]]++;
 						TotAas++;
