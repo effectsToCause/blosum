@@ -29,6 +29,7 @@
 #include <process.h>
 DOS*/
 #include <sys/types.h>
+#include <ctype.h>
 #include <sys/dir.h>
 #include "motifj.big.h"
 
